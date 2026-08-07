@@ -1,11 +1,20 @@
-import { createContext } from "react";
+import { useState } from "react";
+import { TasksContext, type Task  } from "./TasksContext";
 
+export function TaskProvider({ children }: { children: React.ReactNode }) {
+  
+  const [tasks, setTasks] = useState<Task[]>([
+    {
+      text: "Minha primeira tarefa",
+      done: false,
+      categoryId: "initial",
+      id: crypto.randomUUID(),
+    }
+  ])
 
-export const TasksProvider = createContext([
-  {
-    text: "Minha primeira tarefa",
-    id: crypto.randomUUID(),
-    categoryId: "initial",
-    done: false,
-  }
-])
+  return (
+    <TasksContext value={{ tasks, setTasks }}>
+      {children}
+    </TasksContext>
+  )
+}
