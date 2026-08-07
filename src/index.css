@@ -1,0 +1,13 @@
+@import "@fontsource/poppins";
+@import "@fontsource-variable/inter";
+@import "tailwindcss";
+
+@theme {
+  --font-title: "Poppins", sans-serif;
+  --font-text: "Inter Variable", sans-serif;
+  --color-primary: #1b1b1b;
+  --color-secondary: #131314;
+  --color-button: #3b3b3b;
+  --color-button-hover: #4b4b4b;
+  --color-hover: #2a2a2a;
+}
