@@ -1,6 +1,6 @@
 import { createContext, type Dispatch, type SetStateAction } from "react";
 
-export type Category = {
+export interface Category {
   name: string,
   id: string,
   status: boolean
@@ -11,4 +11,4 @@ interface CategoriesContextProps {
   setCategories: Dispatch<SetStateAction<Category[]>>,
 }
 
-export const CategoriesContext = createContext<CategoriesContextProps | []>([])
+export const CategoriesContext = createContext<CategoriesContextProps | null>(null)

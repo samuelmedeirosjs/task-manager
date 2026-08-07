@@ -1,6 +1,6 @@
 import { createContext, type Dispatch, type SetStateAction } from "react";
 
-export type Task = {
+export interface Task {
   text: string,
   id: string,
   categoryId: string,
@@ -12,4 +12,4 @@ interface TasksContextProps {
   setTasks: Dispatch<SetStateAction<Task[]>>
 }
 
-export const TasksContext = createContext<TasksContextProps | []>([])
+export const TasksContext = createContext<TasksContextProps | null>(null)

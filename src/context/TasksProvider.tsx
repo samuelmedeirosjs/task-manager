@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { TasksContext, type Task  } from "./TasksContext";
 
-export function TaskProvider({ children }: { children: React.ReactNode }) {
+export function TasksProvider({ children }: { children: React.ReactNode }) {
   
   const [tasks, setTasks] = useState<Task[]>([
     {
@@ -10,7 +10,7 @@ export function TaskProvider({ children }: { children: React.ReactNode }) {
       categoryId: "initial",
       id: crypto.randomUUID(),
     }
-  ])
+  ]) 
 
   return (
     <TasksContext value={{ tasks, setTasks }}>
