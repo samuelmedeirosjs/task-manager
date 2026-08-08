@@ -1,5 +1,8 @@
 import { useContext } from "react";
-import { CategoriesContext, type Category } from "../context/CategoriesContext";
+import {
+  CategoriesContext,
+  type Category,
+} from "../../../context/CategoriesContext";
 
 export function useCategories() {
   const context = useContext(CategoriesContext);
@@ -34,5 +37,5 @@ export function useCategories() {
     );
   }
 
-  return { categories, addCategory, editCategory, deleteCategory }
+  return { categories, addCategory, editCategory, deleteCategory };
 }

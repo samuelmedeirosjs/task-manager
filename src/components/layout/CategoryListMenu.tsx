@@ -1,7 +1,7 @@
 import { ChevronUp, ChevronDown } from "lucide-react";
 import { useState } from "react";
-import { useCategories } from "../hooks/useCategories";
-import { useTasks } from "../hooks/useTasks";
+import { useCategories } from "../../features/categories/hooks/useCategories";
+import { useTasks } from "../../features/tasks/hooks/useTasks";
 
 export function CategoryListMenu() {
   const [isExpanded, setIsExpanded] = useState(true)
@@ -13,7 +13,7 @@ export function CategoryListMenu() {
     setIsExpanded(e => !e)
   }
 
-  function quantityTasks(id: string):number {
+  function quantityTasks(id: string): number {
     return tasks.filter(task => task.categoryId === id).length
   }
 
