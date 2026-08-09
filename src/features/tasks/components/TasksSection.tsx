@@ -7,40 +7,46 @@ import { SearchTasks } from "./SearchTasks"
 import type { Category } from "../../../context/CategoriesContext"
 
 
-export function TasksSection({ category }:{ category: Category }) {
+export function TasksSection({ category }: { category: Category }) {
 
   const { tasks } = useTasks()
-  const activeCategoryTasks = tasks.filter(t => t.categoryId === category.id)
 
   const [search, setSearch] = useState("");
-  const [tasksList, setTasksList] = useState(activeCategoryTasks)
+  const [filters, setFilters] = useState("all")
 
+  const categoryTasks = tasks.filter(task => task.categoryId === category.id)
+  const filteredTasks = categoryTasks.filter(task => {
+    const matchesSearch = task.text.toLowerCase().includes(search.toLowerCase())
 
-  function handleSearch(e:React.ChangeEvent<HTMLInputElement>) {
+    if(filters === "pending") return matchesSearch && !task.done;
+    if(filters === "finished") return matchesSearch && task.done;
+    return matchesSearch;
+  })
+
+  function handleFilter(filter: string) {
+    setFilters(filter)
+  }
+
+  function handleSearch(e: React.ChangeEvent<HTMLInputElement>) {
     setSearch(e.target.value)
-    if(e.target.value !== "") {
-      setTasksList(activeCategoryTasks.filter(task => task.text.includes(e.target.value)))
-    } else{
-      setTasksList(activeCategoryTasks)
-    }
   }
 
   return (
     <section className="w-full max-w-170 p-4 bg-secondary rounded-2xl flex flex-col gap-3">
       <div className="flex w-full justify-around items-start">
         <HeaderTasksSection categoryName={category.name} />
-        <SearchTasks query={search} onChange={handleSearch}  />
+        <SearchTasks query={search} handleFilter={handleFilter} onChange={handleSearch} filters={filters} />
       </div>
       <main>
-        {tasksList.length > 0 ? tasksList.map(task => 
+        {filteredTasks.length > 0 ? filteredTasks.map(task =>
           <h2 key={task.id}>{task.text}</h2>
-        ) : <h6 className="font-medium text-center mt-5">Todas as tarefas foram concluídas. Parabéns!</h6>}
+        ) : <h6 className="font-medium text-center mt-5">Sem resultados</h6>}
       </main>
     </section>
   )
 }
 
-function HeaderTasksSection({ categoryName }:{ categoryName: string }) {
+function HeaderTasksSection({ categoryName }: { categoryName: string }) {
   return (
     <header className="flex flex-col gap-3 items-start w-full">
       <div>
