@@ -5,11 +5,13 @@ import { useTasks } from "../hooks/useTasks"
 import { SearchTasks } from "./SearchTasks"
 
 import type { Category } from "../../../context/CategoriesContext"
+import { SingleTask } from "./SingleTask"
+import type { Task } from "../../../context/TasksContext"
 
 
 export function TasksSection({ category }: { category: Category }) {
 
-  const { tasks } = useTasks()
+  const { tasks, editTask, deleteTask } = useTasks()
 
   const [search, setSearch] = useState("");
   const [filters, setFilters] = useState("all")
@@ -31,6 +33,10 @@ export function TasksSection({ category }: { category: Category }) {
     setSearch(e.target.value)
   }
 
+  function handleEditTask(taskId:string, updateField:Partial<Task>) {
+    editTask(taskId, updateField)
+  }
+
   return (
     <section className="w-full max-w-170 p-4 bg-secondary rounded-2xl flex flex-col gap-3">
       <div className="flex w-full justify-around items-start">
@@ -39,7 +45,7 @@ export function TasksSection({ category }: { category: Category }) {
       </div>
       <main>
         {filteredTasks.length > 0 ? filteredTasks.map(task =>
-          <h2 key={task.id}>{task.text}</h2>
+          <SingleTask key={task.id} task={task} onEdit={handleEditTask} onDelete={id => deleteTask(id)}/>
         ) : <h6 className="font-medium text-center mt-5">Sem resultados</h6>}
       </main>
     </section>
