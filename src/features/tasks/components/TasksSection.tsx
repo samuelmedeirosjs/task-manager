@@ -11,7 +11,7 @@ import type { Task } from "../../../context/TasksContext"
 
 export function TasksSection({ category }: { category: Category }) {
 
-  const { tasks, editTask, deleteTask } = useTasks()
+  const { tasks, editTask, deleteTask, addTask } = useTasks()
 
   const [search, setSearch] = useState("");
   const [filters, setFilters] = useState("all")
@@ -37,13 +37,17 @@ export function TasksSection({ category }: { category: Category }) {
     editTask(taskId, updateField)
   }
 
+  function handleNewTask() {
+    addTask("", category.id)
+  }
+
   return (
     <section className="w-full max-w-170 p-4 bg-secondary rounded-2xl flex flex-col gap-3">
       <div className="flex w-full justify-around items-start">
-        <HeaderTasksSection categoryName={category.name} />
+        <HeaderTasksSection categoryName={category.name} handleNewTask={handleNewTask} />
         <SearchTasks query={search} handleFilter={handleFilter} onChange={handleSearch} filters={filters} />
       </div>
-      <main>
+      <main className="flex flex-col gap-3">
         {filteredTasks.length > 0 ? filteredTasks.map(task =>
           <SingleTask key={task.id} task={task} onEdit={handleEditTask} onDelete={id => deleteTask(id)}/>
         ) : <h6 className="font-medium text-center mt-5">Sem resultados</h6>}
@@ -52,13 +56,13 @@ export function TasksSection({ category }: { category: Category }) {
   )
 }
 
-function HeaderTasksSection({ categoryName }: { categoryName: string }) {
+function HeaderTasksSection({ categoryName, handleNewTask }: { categoryName: string, handleNewTask: () => void }) {
   return (
     <header className="flex flex-col gap-3 items-start w-full">
       <div>
         <h2>{categoryName}</h2>
       </div>
-      <button className="cursor-pointer w-full text-text flex justify-start items-center gap-2 font-medium hover:bg-text/15 p-1 px-2 rounded-4xl">
+      <button onClick={handleNewTask} className="cursor-pointer w-full text-text flex justify-start items-center gap-2 font-medium hover:bg-text/15 p-1 px-2 rounded-4xl">
         <Plus size={20} />Adicionar uma tarefa
       </button>
     </header>

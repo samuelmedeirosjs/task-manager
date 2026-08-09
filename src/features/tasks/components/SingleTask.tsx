@@ -1,4 +1,4 @@
-import { useState } from "react"
+import { useRef, useState } from "react"
 import type { Task } from "../../../context/TasksContext"
 import { Circle, CircleCheckBig, Trash } from "lucide-react"
 
@@ -10,8 +10,9 @@ interface TaskProps {
 
 export function SingleTask({ task, onEdit, onDelete}: TaskProps) {
 
-  const [isEditMode, setIsEditMode] = useState(false)
+  const [isEditMode, setIsEditMode] = useState(task.text ? false : true)
   const [text, setText] = useState(task.text)
+  const inputRef = useRef<HTMLInputElement>(null)
 
   function handleEditText(e: React.ChangeEvent<HTMLInputElement>) {
     setText(e.target.value)
@@ -19,7 +20,9 @@ export function SingleTask({ task, onEdit, onDelete}: TaskProps) {
   
   function handleBlur() {
     setIsEditMode(false)
-    onEdit(task.id, { text: text })
+    if(text !== '') {
+      onEdit(task.id, { text: text }) 
+    } else onDelete(task.id)
   }
 
   function handleDone() {
@@ -30,16 +33,23 @@ export function SingleTask({ task, onEdit, onDelete}: TaskProps) {
     onDelete(task.id)
   }
 
+  function handleClickText(){
+    if(!isEditMode) {
+      setIsEditMode(true)
+      inputRef.current?.focus()
+    }
+  }
+
   return (
     <div className="flex gap-2">
       <button className="cursor-pointer" onClick={handleDone}>
         {task.done ? <CircleCheckBig /> : <Circle />} 
       </button>
-      <div className="cursor-pointer w-full">
+      <div className="cursor-pointer w-full" onClick={handleClickText}>
         {!isEditMode ? (
-          <h4 className={`font-medium decoration-2 ${task.done ? "line-through" : ""}`} onClick={() => setIsEditMode(true)}>{task.text}</h4>
+          <h4 className={`font-medium decoration-2 ${task.done ? "line-through" : ""}`}>{task.text}</h4>
         ) : (
-          <input autoFocus type="text" value={text} maxLength={50} onBlur={handleBlur} onChange={handleEditText} 
+          <input ref={inputRef} placeholder="Insira sua tarefa" autoFocus type="text" value={text} maxLength={50} onBlur={handleBlur} onChange={handleEditText} 
           className="w-full"/>
         )}
       </div>
