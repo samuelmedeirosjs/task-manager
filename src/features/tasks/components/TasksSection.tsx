@@ -43,10 +43,10 @@ export function TasksSection({ category }: { category: Category }) {
   }
 
   return (
-    <section className="w-full max-w-170 p-4 bg-secondary rounded-2xl flex flex-col gap-3">
+    <section className="w-full min-w-75 md:min-w-120 min-h-50 p-4 bg-secondary rounded-2xl flex flex-col gap-3">
       <div className="flex w-full justify-around items-start">
         <HeaderTasksSection category={category} handleNewTask={handleNewTask} />
-        <SearchTasks query={search} handleFilter={handleFilter} onChange={handleSearch} filters={filters} />
+        {/* <SearchTasks query={search} handleFilter={handleFilter} onChange={handleSearch} filters={filters} /> */}
       </div>
       <main className="flex flex-col gap-3">
         {filteredTasks.length > 0 ? filteredTasks.map(task =>

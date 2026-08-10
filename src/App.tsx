@@ -7,12 +7,11 @@ import { useCategories } from "./features/categories/hooks/useCategories";
 function App() {
 
   const { categories } = useCategories();
-  // const categories = [{ id: "2221", name: "Coluna 1", status: true }, { id: "2221", name: "Coluna 1", status: true }, { id: "2221", name: "Coluna 1", status: true }]
 
   return (
-    <div className="w-screen h-screen bg-primary text-white font-text flex">
+    <div className="w-screen h-screen text-white font-text flex overflow-x-hidden">
       <SideBarMenu />
-        <main className="w-full flex p-15 gap-5">
+        <main className="flex flex-1 items-start h-fit p-15 gap-5 overflow-x-auto">
           {categories.filter(c => c.status).map(category =>
             <TasksSection key={category.id} category={category} />
           )}
@@ -21,4 +20,4 @@ function App() {
   )
 }
 
-export default App
+export default App;
