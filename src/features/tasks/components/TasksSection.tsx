@@ -43,7 +43,7 @@ export function TasksSection({ category }: { category: Category }) {
   }
 
   return (
-    <section className="w-full min-w-75 md:min-w-120 min-h-50 p-4 bg-secondary rounded-2xl flex flex-col gap-3">
+    <section className="w-full min-w-75 md:min-w-120 max-w-170 min-h-40 p-4 bg-secondary rounded-2xl flex flex-col gap-3">
       <div className="flex w-full justify-around items-start">
         <HeaderTasksSection category={category} handleNewTask={handleNewTask} />
         {/* <SearchTasks query={search} handleFilter={handleFilter} onChange={handleSearch} filters={filters} /> */}
