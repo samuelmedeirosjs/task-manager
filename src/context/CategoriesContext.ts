@@ -1,4 +1,4 @@
-import { createContext, type Dispatch, type SetStateAction } from "react";
+import { createContext } from "react";
 
 export interface Category {
   name: string,
@@ -8,7 +8,7 @@ export interface Category {
 
 interface CategoriesContextProps {
   categories: Category[],
-  setCategories: Dispatch<SetStateAction<Category[]>>,
+  setCategories: (newValue: Category[] | ((val: Category[]) => Category[])) => void
 }
 
 export const CategoriesContext = createContext<CategoriesContextProps | null>(null)

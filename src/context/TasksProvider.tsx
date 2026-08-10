@@ -1,16 +1,16 @@
-import { useState } from "react";
-import { TasksContext, type Task  } from "./TasksContext";
+import { TasksContext, type Task } from "./TasksContext";
+import { useLocalStorage } from "../hooks/useLocalStorage";
 
 export function TasksProvider({ children }: { children: React.ReactNode }) {
-  
-  const [tasks, setTasks] = useState<Task[]>([
+
+  const [ tasks, setTasks ] = useLocalStorage<Task[]>("tasks", [
     {
-      text: "Minha primeira tarefa",
-      done: false,
-      categoryId: "initial",
-      id: crypto.randomUUID(),
+    text: "Minha primeira tarefa",
+    done: false,
+    categoryId: "initial",
+    id: crypto.randomUUID(),
     }
-  ]) 
+  ]);
 
   return (
     <TasksContext value={{ tasks, setTasks }}>
