@@ -1,4 +1,4 @@
-import { useState } from "react"
+import React, { useState } from "react"
 import { Plus } from "lucide-react"
 
 import { useTasks } from "../hooks/useTasks"
@@ -7,13 +7,14 @@ import { SearchTasks } from "./SearchTasks"
 import type { Category } from "../../../context/CategoriesContext"
 import { SingleTask } from "./SingleTask"
 import type { Task } from "../../../context/TasksContext"
+import { useCategories } from "../../categories/hooks/useCategories"
 
 
 export function TasksSection({ category }: { category: Category }) {
 
   const { tasks, editTask, deleteTask, addTask } = useTasks()
 
-  const [search, setSearch] = useState("");
+  const [search, setSearch] = useState("")
   const [filters, setFilters] = useState("all")
 
   const categoryTasks = tasks.filter(task => task.categoryId === category.id)
@@ -38,13 +39,13 @@ export function TasksSection({ category }: { category: Category }) {
   }
 
   function handleNewTask() {
-    addTask("", category.id)
+    addTask("Nova tarefa", category.id)
   }
 
   return (
     <section className="w-full max-w-170 p-4 bg-secondary rounded-2xl flex flex-col gap-3">
       <div className="flex w-full justify-around items-start">
-        <HeaderTasksSection categoryName={category.name} handleNewTask={handleNewTask} />
+        <HeaderTasksSection category={category} handleNewTask={handleNewTask} />
         <SearchTasks query={search} handleFilter={handleFilter} onChange={handleSearch} filters={filters} />
       </div>
       <main className="flex flex-col gap-3">
@@ -56,11 +57,35 @@ export function TasksSection({ category }: { category: Category }) {
   )
 }
 
-function HeaderTasksSection({ categoryName, handleNewTask }: { categoryName: string, handleNewTask: () => void }) {
+function HeaderTasksSection({ category, handleNewTask }: { category: Category, handleNewTask: () => void }) {
+
+  const [isEditMode, setIsEditMode] = useState(category.name !== "Nova categoria" ? false : true)
+  const [categoryName, setCategoryName] = useState(category.name)
+  const { editCategory } = useCategories()
+
+  function handleEditName(e: React.ChangeEvent<HTMLInputElement>) {
+    setCategoryName(e.target.value);
+  }
+
+  function handleClickText() {
+    if(isEditMode) {
+      setIsEditMode(false);
+    } else setIsEditMode(true);
+  }
+
+  function handleBlur() {
+    editCategory(category.id, { name: categoryName })
+    setIsEditMode(false)
+  }
+
   return (
     <header className="flex flex-col gap-3 items-start w-full">
-      <div>
-        <h2>{categoryName}</h2>
+      <div onClick={handleClickText}>
+        {
+          !isEditMode ? <h2>{categoryName}</h2> : (
+            <input autoFocus maxLength={15} type="text" value={categoryName} onBlur={handleBlur} onChange={handleEditName}/>
+          )
+        }
       </div>
       <button onClick={handleNewTask} className="cursor-pointer w-full text-text flex justify-start items-center gap-2 font-medium hover:bg-text/15 p-1 px-2 rounded-4xl">
         <Plus size={20} />Adicionar uma tarefa

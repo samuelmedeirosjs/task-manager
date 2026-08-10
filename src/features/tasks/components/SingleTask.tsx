@@ -10,7 +10,7 @@ interface TaskProps {
 
 export function SingleTask({ task, onEdit, onDelete}: TaskProps) {
 
-  const [isEditMode, setIsEditMode] = useState(task.text ? false : true)
+  const [isEditMode, setIsEditMode] = useState(task.text !== "Nova tarefa" ? false : true)
   const [text, setText] = useState(task.text)
   const inputRef = useRef<HTMLInputElement>(null)
 
@@ -49,7 +49,7 @@ export function SingleTask({ task, onEdit, onDelete}: TaskProps) {
         {!isEditMode ? (
           <h4 className={`font-medium decoration-2 ${task.done ? "line-through" : ""}`}>{task.text}</h4>
         ) : (
-          <input ref={inputRef} placeholder="Insira sua tarefa" autoFocus type="text" value={text} maxLength={50} onBlur={handleBlur} onChange={handleEditText} 
+          <input ref={inputRef} placeholder="Tarefa" autoFocus type="text" value={text} maxLength={50} onBlur={handleBlur} onChange={handleEditText} 
           className="w-full"/>
         )}
       </div>
