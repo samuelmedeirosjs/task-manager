@@ -3,12 +3,14 @@ import {
   CategoriesContext,
   type Category,
 } from "../../../context/CategoriesContext";
+import { useTasks } from "../../tasks/hooks/useTasks";
 
 export function useCategories() {
   const context = useContext(CategoriesContext);
   if (!context) throw new Error("useCategories out of CategoriesProvider");
 
   const { categories, setCategories } = context;
+  const { deleteTaskByCategoryId } = useTasks();
 
   function addCategory(name: string) {
     setCategories((prevCategories) => [
@@ -33,8 +35,10 @@ export function useCategories() {
 
   function deleteCategory(categoryId: string) {
     setCategories((prevCategories) =>
-      prevCategories.filter((category) => category.id !== categoryId),
+      prevCategories.filter((category) => category.id !== categoryId)
     );
+
+    deleteTaskByCategoryId(categoryId)
   }
 
   return { categories, addCategory, editCategory, deleteCategory };

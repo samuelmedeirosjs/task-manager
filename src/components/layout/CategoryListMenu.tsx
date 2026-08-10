@@ -1,14 +1,20 @@
-import { ChevronUp, ChevronDown, Plus } from "lucide-react";
+import { ChevronUp, ChevronDown, Plus, Trash2 } from "lucide-react";
 import { useState } from "react";
 import { useCategories } from "../../features/categories/hooks/useCategories";
 import { useTasks } from "../../features/tasks/hooks/useTasks";
 import { SingleCategory } from "../../features/categories/components/SingleCategory";
+import type { Category } from "../../context/CategoriesContext";
+import DeleteCategoryModal from "../../features/categories/components/DeleteCategoryModal";
 
 export function CategoryListMenu() {
   const [isExpanded, setIsExpanded] = useState(true)
+  const [isDeleteMode, setIsDeleteMode] = useState(false)
+  const [isModalDeleteOpen, setIsModalDeleteOpen] = useState(false)
+  const [toDeleteCategory, setToDeleteCategory] = useState<Category | null>(null)
 
-  const { categories, editCategory, addCategory } = useCategories();
+  const { categories, editCategory, addCategory, deleteCategory } = useCategories();
   const { tasks } = useTasks();
+
 
   function handleExpanded() {
     setIsExpanded(e => !e)
@@ -25,6 +31,20 @@ export function CategoryListMenu() {
     addCategory("Nova categoria")
   }
 
+  function handleChecked(category: Category) {
+    if(!isDeleteMode) {
+      editCategory(category.id, { status: !category.status })
+    } else {
+      setToDeleteCategory(category)
+      setIsModalDeleteOpen(true)
+    }
+  }
+
+  function handleConfirmDelete(){
+    if(toDeleteCategory) deleteCategory(toDeleteCategory.id)
+    setIsModalDeleteOpen(false);
+    setIsDeleteMode(false);
+  }
 
   return (
     <section>
@@ -35,13 +55,18 @@ export function CategoryListMenu() {
       {isExpanded &&
         <nav className="mt-2 flex flex-col justify-end-safe">
           {categories.map(category =>
-            <SingleCategory key={category.id}  quantityTasks={() => quantityTasks(category.id)} category={category} handleChecked={() => editCategory(category.id, { status: !category.status })} />
+            <SingleCategory key={category.id} isDeleteMode={isDeleteMode} quantityTasks={() => quantityTasks(category.id)} category={category} handleChecked={() => handleChecked(category)} />
           )}
         </nav>
       }
       <button onClick={handleNewCategory} className="flex w-full gap-2 mt-2 text-text font-medium px-3 py-1 items-center rounded-4xl hover:bg-hover cursor-pointer">
         <Plus color="var(--color-text)"/> Criar nova lista
       </button>
+      <button onClick={() => setIsDeleteMode(s => !s)} className="flex w-full gap-2 mt-2 text-red-400 font-medium px-3 py-1 items-center rounded-4xl hover:bg-hover cursor-pointer">
+        <Trash2 color="#ff6467"/> {!isDeleteMode ? "Excluir lista" : "Cancelar"}
+      </button>
+
+      <DeleteCategoryModal onConfirm={() => handleConfirmDelete()} category={toDeleteCategory} onClose={() => setIsModalDeleteOpen(false)} isModalDeleteOpen={isModalDeleteOpen}/>
     </section>
   )
 }

@@ -31,5 +31,9 @@ export function useTasks() {
     setTasks((prevTasks) => prevTasks.filter((task) => task.id !== taskId));
   }
 
-  return { tasks, addTask, editTask, deleteTask };
+  function deleteTaskByCategoryId(categoryId: string) {
+    setTasks(prevTasks => prevTasks.filter(task => task.categoryId !== categoryId))
+  }
+
+  return { tasks, addTask, editTask, deleteTask, deleteTaskByCategoryId };
 }
