@@ -2,7 +2,7 @@ import { ChevronUp, ChevronDown, Plus, Trash2 } from "lucide-react";
 import { useState } from "react";
 import { useCategories } from "../../features/categories/hooks/useCategories";
 import { useTasks } from "../../features/tasks/hooks/useTasks";
-import { SingleCategory } from "../../features/categories/components/SingleCategory";
+import { SingleCategoryItem } from "../../features/categories/components/SingleCategoryItem";
 import type { Category } from "../../context/CategoriesContext";
 import DeleteCategoryModal from "../../features/categories/components/DeleteCategoryModal";
 
@@ -55,7 +55,7 @@ export function CategoryListMenu() {
       {isExpanded &&
         <nav className="mt-2 flex flex-col justify-end-safe">
           {categories.map(category =>
-            <SingleCategory key={category.id} isDeleteMode={isDeleteMode} quantityTasks={() => quantityTasks(category.id)} category={category} handleChecked={() => handleChecked(category)} />
+            <SingleCategoryItem key={category.id} isDeleteMode={isDeleteMode} quantityTasks={() => quantityTasks(category.id)} category={category} handleChecked={() => handleChecked(category)} />
           )}
         </nav>
       }
