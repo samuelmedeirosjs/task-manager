@@ -4,6 +4,7 @@ import {
   type Category,
 } from "../../../context/CategoriesContext";
 import { useTasks } from "../../tasks/hooks/useTasks";
+import type { DropResult } from "@hello-pangea/dnd";
 
 export function useCategories() {
   const context = useContext(CategoriesContext);
@@ -35,11 +36,37 @@ export function useCategories() {
 
   function deleteCategory(categoryId: string) {
     setCategories((prevCategories) =>
-      prevCategories.filter((category) => category.id !== categoryId)
+      prevCategories.filter((category) => category.id !== categoryId),
     );
 
-    deleteTaskByCategoryId(categoryId)
+    deleteTaskByCategoryId(categoryId);
   }
 
-  return { categories, addCategory, editCategory, deleteCategory };
+  function handleDragEndCategory(result: DropResult) {
+    const { destination, source } = result;
+    if (!destination) return;
+    if (
+      destination.droppableId === source.droppableId &&
+      destination.index === source.index
+    )
+      return;
+
+    setCategories((prevCategories) => {
+      const newCategories = [...prevCategories];
+
+      const [updatedCategory] = newCategories.splice(source.index, 1);
+
+      newCategories.splice(destination.index, 0, updatedCategory);
+
+      return newCategories;
+    });
+  }
+
+  return {
+    categories,
+    addCategory,
+    editCategory,
+    deleteCategory,
+    handleDragEndCategory,
+  };
 }

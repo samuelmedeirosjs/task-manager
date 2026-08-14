@@ -63,7 +63,7 @@ export function useTasks() {
         ...removedTask,
         categoryId: finishedColumn,
       };
-
+      
       const destinationTasks = newTasks.filter(
         (task) => task.categoryId === finishedColumn,
       );
