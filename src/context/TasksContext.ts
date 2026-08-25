@@ -7,7 +7,7 @@ export interface Task {
   done: boolean,
 }
 
-interface TasksContextProps {
+interface TasksContextPro ps {
   tasks: Task[],
   setTasks: (newValue: Task[] | ((val: Task[]) => Task[])) => void
 }

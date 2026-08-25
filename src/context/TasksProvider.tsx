@@ -3,12 +3,12 @@ import { useLocalStorage } from "../hooks/useLocalStorage";
 
 export function TasksProvider({ children }: { children: React.ReactNode }) {
 
-  const [ tasks, setTasks ] = useLocalStorage<Task[]>("tasks", [
+  const [tasks, setTasks] = useLocalStorage<Task[]>("tasks", [
     {
-    text: "Minha primeira tarefa",
-    done: false,
-    categoryId: "initial",
-    id: crypto.randomUUID(),
+      text: "Minha primeira tarefa",
+      done: false,
+      categoryId: "initial",
+      id: crypto.randomUUID(),
     }
   ]);
 
