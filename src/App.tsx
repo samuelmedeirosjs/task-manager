@@ -2,14 +2,14 @@
 import { SideBarMenu } from './components/layout/SideBarMenu';
 import { SingleCategory } from "./features/categories/components/SingleCategory";
 
-import { useCategories } from "./features/categories/hooks/useCategories";
 import { DragDropContext } from "@hello-pangea/dnd";
-import { useTasks } from "./features/tasks/hooks/useTasks";
+import { useStoreTasks } from "./store/tasks";
+import { useStoreCategories } from "./store/categories";
 
 function App() {
 
-  const { categories } = useCategories();
-  const { handleDragEndTask } = useTasks();
+  const { categories } = useStoreCategories();
+  const { handleDragEndTask } = useStoreTasks();
 
   return (
     <div className="w-screen h-screen text-white font-text flex">

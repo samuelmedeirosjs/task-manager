@@ -1,13 +1,7 @@
 import type { DropResult } from "@hello-pangea/dnd";
 import { create } from "zustand";
-import { persist } from "zustand/middleware"
-
-interface Task {
-  text: string;
-  id: string;
-  categoryId: string;
-  done: boolean;
-}
+import { persist } from "zustand/middleware";
+import type { Task } from "../types/task";
 
 interface TaskStore {
   tasks: Task[];
@@ -20,89 +14,91 @@ interface TaskStore {
 
 export const useStoreTasks = create<TaskStore>()(
   persist(
-  (set) => ({
-  tasks: [
-    {
-      text: "Minha primeira tarefa",
-      done: false,
-      categoryId: "initial",
-      id: crypto.randomUUID(),
-    },
-  ],
-
-  addTask: (text: string, categoryId: string) =>
-    set(({ tasks }) => ({
+    (set) => ({
       tasks: [
         {
-          text: text,
+          text: "Minha primeira tarefa",
           done: false,
+          categoryId: "initial",
           id: crypto.randomUUID(),
-          categoryId: categoryId,
         },
-        ...tasks,
       ],
-    })),
 
-  editTask: (taskId: string, updateFields: Partial<Task>) =>
-    set(({ tasks }) => ({
-      tasks: tasks.map((task) =>
-        task.id === taskId ? { ...task, ...updateFields } : task,
-      ),
-    })),
+      addTask: (text: string, categoryId: string) =>
+        set(({ tasks }) => ({
+          tasks: [
+            {
+              text: text,
+              done: false,
+              id: crypto.randomUUID(),
+              categoryId: categoryId,
+            },
+            ...tasks,
+          ],
+        })),
 
-  deleteTask: (taskId: string) =>
-    set(({ tasks }) => ({
-      tasks: tasks.filter((task) => task.id !== taskId),
-    })),
+      editTask: (taskId: string, updateFields: Partial<Task>) =>
+        set(({ tasks }) => ({
+          tasks: tasks.map((task) =>
+            task.id === taskId ? { ...task, ...updateFields } : task,
+          ),
+        })),
 
-  deleteTaskByCategoryId: (categoryId: string) =>
-    set(({ tasks }) => ({
-      tasks: tasks.filter((task) => task.categoryId !== categoryId),
-    })),
+      deleteTask: (taskId: string) =>
+        set(({ tasks }) => ({
+          tasks: tasks.filter((task) => task.id !== taskId),
+        })),
 
-  handleDragEndTask: (result: DropResult) =>
-    set(({ tasks }) => {
-      const { destination, source, draggableId } = result;
-      if (!destination) return { tasks: tasks };
-      if (
-        destination.droppableId === source.droppableId &&
-        destination.index === source.index
-      )
-        return { tasks: tasks };
+      deleteTaskByCategoryId: (categoryId: string) =>
+        set(({ tasks }) => ({
+          tasks: tasks.filter((task) => task.categoryId !== categoryId),
+        })),
 
-      const finishedColumn = destination.droppableId;
+      handleDragEndTask: (result: DropResult) =>
+        set(({ tasks }) => {
+          const { destination, source, draggableId } = result;
+          if (!destination) return { tasks: tasks };
+          if (
+            destination.droppableId === source.droppableId &&
+            destination.index === source.index
+          )
+            return { tasks: tasks };
 
-      const newTasks = [...tasks];
+          const finishedColumn = destination.droppableId;
 
-      const taskIndexInGlobal = newTasks.findIndex(
-        (task) => task.id === draggableId,
-      );
-      if (taskIndexInGlobal === -1) return { tasks: tasks };
+          const newTasks = [...tasks];
 
-      const [removedTask] = newTasks.splice(taskIndexInGlobal, 1);
+          const taskIndexInGlobal = newTasks.findIndex(
+            (task) => task.id === draggableId,
+          );
+          if (taskIndexInGlobal === -1) return { tasks: tasks };
 
-      const updatedTask: Task = {
-        ...removedTask,
-        categoryId: finishedColumn,
-      };
+          const [removedTask] = newTasks.splice(taskIndexInGlobal, 1);
 
-      const destinationTasks = newTasks.filter(
-        (task) => task.categoryId === finishedColumn,
-      );
+          const updatedTask: Task = {
+            ...removedTask,
+            categoryId: finishedColumn,
+          };
 
-      const targetTaskAtDestination = destinationTasks[destination.index];
-      if (targetTaskAtDestination) {
-        const finalInsertIndex = newTasks.findIndex(
-          (task) => task.id === targetTaskAtDestination.id,
-        );
-        newTasks.splice(finalInsertIndex, 0, updatedTask);
-      } else {
-        newTasks.push(updatedTask);
-      }
+          const destinationTasks = newTasks.filter(
+            (task) => task.categoryId === finishedColumn,
+          );
 
-      return { tasks: newTasks };
+          const targetTaskAtDestination = destinationTasks[destination.index];
+          if (targetTaskAtDestination) {
+            const finalInsertIndex = newTasks.findIndex(
+              (task) => task.id === targetTaskAtDestination.id,
+            );
+            newTasks.splice(finalInsertIndex, 0, updatedTask);
+          } else {
+            newTasks.push(updatedTask);
+          }
+
+          return { tasks: newTasks };
+        }),
     }),
-}),
-{
-  name: "tasks",
-}));
+    {
+      name: "tasks",
+    },
+  ),
+);

@@ -1,16 +1,14 @@
-
-import { useTasks } from "../../tasks/hooks/useTasks"
-
-import type { Category } from "../../../context/CategoriesContext"
+import type { Category } from "../../../types/category"
 import { SingleTask } from "../../tasks/components/SingleTask"
-import type { Task } from "../../../context/TasksContext"
+import type { Task } from "../../../types/task"
 import { HeaderTasksSection } from "../../tasks/components/HeaderTasksSection"
 import { Droppable } from "@hello-pangea/dnd"
+import { useStoreTasks } from "../../../store/tasks"
 
 
 export function SingleCategory({ category }: { category: Category }) {
 
-  const { tasks, editTask, deleteTask, addTask } = useTasks()
+  const { tasks, editTask, deleteTask, addTask } = useStoreTasks()
 
   // const [search, setSearch] = useState("")
   // const [filters, setFilters] = useState("all")

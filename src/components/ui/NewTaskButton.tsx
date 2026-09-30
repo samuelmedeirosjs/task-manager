@@ -1,11 +1,11 @@
 import { Plus } from 'lucide-react';
-import { useTasks } from "../../features/tasks/hooks/useTasks";
-import { useCategories } from "../../features/categories/hooks/useCategories";
+import { useStoreTasks } from "../../store/tasks";
+import { useStoreCategories } from "../../store/categories";
 
 export function NewTaskButton() {
 
-  const { addTask } = useTasks();
-  const { categories } = useCategories();
+  const { addTask } = useStoreTasks();
+  const { categories } = useStoreCategories();
   const firstActiveCategory = categories.filter(category => category.status)[0]
 
   return (

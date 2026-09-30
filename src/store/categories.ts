@@ -1,14 +1,14 @@
 import type { DropResult } from "@hello-pangea/dnd";
 import { create } from "zustand";
 import { persist } from "zustand/middleware";
-import type { Category } from "../context/CategoriesContext";
+import type { Category } from "../types/category";
 
 interface CategoryStore {
   categories: Category[];
   addCategory: (name: string) => void;
   editCategory: (categoryId: string, updateFields: Partial<Category>) => void;
   deleteCategory: (categoryId: string) => void;
-  handleDragEndTask: (result: DropResult) => void;
+  handleDragEndCategory: (result: DropResult) => void;
 }
 
 export const useStoreCategories = create<CategoryStore>()(
@@ -50,7 +50,7 @@ export const useStoreCategories = create<CategoryStore>()(
           ),
         })),
 
-      handleDragEndTask: (result: DropResult) => {
+      handleDragEndCategory: (result: DropResult) => {
         const { destination, source } = result;
         if (!destination) return;
         if (

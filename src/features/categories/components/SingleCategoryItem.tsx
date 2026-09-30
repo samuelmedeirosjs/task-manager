@@ -1,5 +1,5 @@
 import { Square, SquareCheckBig, Trash } from "lucide-react";
-import type { Category } from "../../../context/CategoriesContext";
+import type { Category } from "../../../types/category";
 import { Draggable } from "@hello-pangea/dnd";
 
 interface SingleCategoryProps {

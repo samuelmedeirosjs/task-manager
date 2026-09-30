@@ -1,11 +1,11 @@
 import { ChevronUp, ChevronDown, Plus, Trash2 } from "lucide-react";
 import { useState } from "react";
-import { useCategories } from "../../features/categories/hooks/useCategories";
-import { useTasks } from "../../features/tasks/hooks/useTasks";
 import { SingleCategoryItem } from "../../features/categories/components/SingleCategoryItem";
-import type { Category } from "../../context/CategoriesContext";
+import type { Category } from "../../types/category";
 import DeleteCategoryModal from "../../features/categories/components/DeleteCategoryModal";
 import { DragDropContext, Droppable } from "@hello-pangea/dnd";
+import { useStoreTasks } from "../../store/tasks";
+import { useStoreCategories } from "../../store/categories";
 
 export function CategoryListMenu() {
   const [isExpanded, setIsExpanded] = useState(true)
@@ -13,8 +13,8 @@ export function CategoryListMenu() {
   const [isModalDeleteOpen, setIsModalDeleteOpen] = useState(false)
   const [toDeleteCategory, setToDeleteCategory] = useState<Category | null>(null)
 
-  const { categories, editCategory, addCategory, deleteCategory, handleDragEndCategory } = useCategories();
-  const { tasks } = useTasks();
+  const { categories, editCategory, addCategory, deleteCategory, handleDragEndCategory } = useStoreCategories();
+  const { tasks } = useStoreTasks();
 
 
   function handleExpanded() {

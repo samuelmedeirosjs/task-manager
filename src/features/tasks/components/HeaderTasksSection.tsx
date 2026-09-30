@@ -1,14 +1,14 @@
 import React, { useState } from "react"
 import { Plus } from "lucide-react"
 
-import type { Category } from "../../../context/CategoriesContext"
-import { useCategories } from "../../categories/hooks/useCategories"
+import type { Category } from "../../../types/category"
+import { useStoreCategories } from "../../../store/categories"
 
 export function HeaderTasksSection({ category, handleNewTask }: { category: Category, handleNewTask: () => void }) {
 
   const [isEditMode, setIsEditMode] = useState(category.name !== "Nova categoria" ? false : true)
   const [categoryName, setCategoryName] = useState(category.name)
-  const { editCategory } = useCategories()
+  const { editCategory } = useStoreCategories()
 
   function handleEditName(e: React.ChangeEvent<HTMLInputElement>) {
     setCategoryName(e.target.value);
@@ -30,7 +30,7 @@ export function HeaderTasksSection({ category, handleNewTask }: { category: Cate
       <div onClick={handleClickText}>
         {
           !isEditMode ? <h2>{categoryName}</h2> : (
-            <input autoFocus maxLength={15} type="text" value={categoryName} onBlur={handleBlur} onChange={handleEditName}/>
+            <input autoFocus maxLength={15} type="text" value={categoryName} onBlur={handleBlur} onChange={handleEditName} />
           )
         }
       </div>
